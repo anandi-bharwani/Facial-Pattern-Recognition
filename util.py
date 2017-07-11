@@ -15,24 +15,26 @@ def y2indicator(Y, K):
         Y_ind[i, Y[i]] = 1
     return Y_ind
 
+	
 #Get fer.csv
 def get_image_data():
 	df = open('./fer2013/fer2013.csv')
 	data = [s.strip() for s in df]
 
 	X = np.zeros([len(data)-1, 48*48])
-	Y = []
+	Y = np.zeros(len(data)-1)
 	for i in range(len(data) - 1):
 		if i==0:
 			pass
 		else:
 			row = data[i].split(',')
-			Y.append(int(row[0]))
+			Y[i] = int(row[0])
 			X[i] = np.array([int(p)/255 for p in row[1].split()])
 			#print(X)
 
+	#Balance class 1
+	print(i)
 	
-	#X = np.array(X)
 	Y = np.array(Y)
 	K = len(set(Y))
 	Y = y2indicator(Y, K)
@@ -53,8 +55,14 @@ def load_data():
 
 	return X,Y
 
-# print("Reading data")
-# get_image_data()
-# print("Loading data from file")
-# X, Y = load_data()
-# print(X.shape, Y.shape)
+#For CNN
+def get_4d_data():
+	X, Y = load_data()
+	N, D = X.shape
+	d = int(np.sqrt(D))
+	X = X.reshape(N, 1, d, d)
+	return X,Y
+
+
+#X, Y = get_4d_data()
+#print( X.shape, Y.shape)
